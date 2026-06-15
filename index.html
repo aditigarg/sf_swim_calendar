@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SF Lap Swim Weekly Calendar</title>
+  <style>
+    :root {
+      --time-col: 72px;
+      --day-min-width: 360px;
+      --hour-height: 72px;
+      --start-hour: 6;
+      --end-hour: 21;
+      --ink: #17212b;
+      --muted: #586575;
+      --grid: #d9e0e8;
+      --grid-soft: #eef2f6;
+      --header: #10384d;
+      --page: #f7f8f4;
+      --panel: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.35;
+    }
+
+    .page {
+      padding: 28px;
+      min-width: 2600px;
+    }
+
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--header);
+      font-size: 30px;
+      letter-spacing: 0;
+    }
+
+    .subhead {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .validity {
+      margin-top: 8px;
+      max-width: 760px;
+      color: #26313d;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px 14px;
+      max-width: 640px;
+      font-size: 12px;
+      color: #2b3440;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .calendar-wrap {
+      border: 1px solid #c5ced8;
+      background: var(--panel);
+      box-shadow: 0 10px 24px rgba(38, 54, 73, 0.08);
+      overflow: auto;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: var(--time-col) repeat(7, minmax(var(--day-min-width), 1fr));
+      min-width: calc(var(--time-col) + 7 * var(--day-min-width));
+    }
+
+    .corner,
+    .day-head {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--header);
+      color: white;
+      min-height: 52px;
+      border-right: 1px solid rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 750;
+      font-size: 14px;
+    }
+
+    .corner {
+      left: 0;
+      z-index: 6;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 12px;
+    }
+
+    .time-axis {
+      position: relative;
+      grid-column: 1;
+      height: calc((var(--end-hour) - var(--start-hour)) * var(--hour-height));
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          var(--grid-soft) 0,
+          var(--grid-soft) 1px,
+          transparent 1px,
+          transparent var(--hour-height)
+        );
+      border-right: 1px solid var(--grid);
+    }
+
+    .time-label {
+      position: absolute;
+      left: 0;
+      right: 8px;
+      top: calc((var(--hour) - var(--start-hour)) * var(--hour-height) - 8px);
+      text-align: right;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .day {
+      position: relative;
+      height: calc((var(--end-hour) - var(--start-hour)) * var(--hour-height));
+      border-right: 1px solid var(--grid);
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          var(--grid-soft) 0,
+          var(--grid-soft) 1px,
+          transparent 1px,
+          transparent var(--hour-height)
+        );
+    }
+
+    .day:nth-child(odd) {
+      background-color: #fbfcfd;
+    }
+
+    .event {
+      position: absolute;
+      top: calc((var(--start) - var(--start-hour) * 60) * var(--hour-height) / 60 + 2px);
+      height: max(24px, calc((var(--end) - var(--start)) * var(--hour-height) / 60 - 4px));
+      left: calc(var(--lane) * (100% - 8px) / var(--lanes) + 4px);
+      width: calc((100% - 8px) / var(--lanes) - 4px);
+      border-radius: 6px;
+      border: 1px solid color-mix(in srgb, var(--color), #1a1a1a 26%);
+      background: color-mix(in srgb, var(--color), white 12%);
+      color: var(--text, #111827);
+      padding: 5px 6px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(20, 33, 48, 0.16);
+    }
+
+    .event .pool {
+      font-weight: 800;
+      font-size: 11px;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .event .time {
+      margin-top: 2px;
+      font-weight: 650;
+      font-size: 10px;
+      line-height: 1.1;
+      opacity: 0.92;
+    }
+
+    .event.short {
+      padding-block: 3px;
+    }
+
+    .event.short .pool {
+      font-size: 10px;
+    }
+
+    .event.short .time {
+      display: none;
+    }
+
+    .footnotes {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .sources {
+      text-align: right;
+    }
+
+    .source-links {
+      margin-top: 8px;
+    }
+
+    .source-links a {
+      color: #0b5d78;
+      font-weight: 650;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .page {
+        padding: 12px;
+        min-width: 0;
+      }
+
+      .calendar-wrap {
+        overflow: visible;
+        box-shadow: none;
+      }
+
+      .calendar {
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <h1>SF Public Pools Lap Swim Weekly Calendar</h1>
+        <div class="validity">
+          Valid summer 2026 schedule: most pools through Aug. 15;
+          Mission through Aug. 16; Garfield/Rossi through Aug. 13;
+          North Beach through Aug. 10; Sava through June 27.
+        </div>
+        <div class="subhead">Combined lap swim appointments from SF Rec &amp; Park pool schedules.</div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </header>
+
+    <section class="calendar-wrap" aria-label="Weekly lap swim calendar">
+      <div class="calendar" id="calendar">
+        <div class="corner">Time</div>
+      </div>
+    </section>
+
+    <section class="footnotes">
+      <div>
+        Sava's posted schedule covers June 9-June 27, 2026. North Beach has separate Cool and Warm pool lap swim slots.
+        Hamilton is omitted because no current lap-swim PDF was found in the same source set.
+        <div class="source-links">
+          Sources:
+          <a href="https://sfrecpark.org/DocumentCenter/View/29319">Balboa</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29320">Coffman</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29362">Garfield</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29328">MLK</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29395">Mission</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29329">North Beach</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29326">Rossi</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29336">Sava</a>.
+        </div>
+      </div>
+      <div class="sources">Closures noted by SF Rec &amp; Park: June 19 and July 4.</div>
+    </section>
+  </main>
+
+  <script>
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    const colors = {
+      "Balboa": "#77b7d8",
+      "Coffman": "#f4a261",
+      "Garfield": "#8ab17d",
+      "Mission": "#e76f51",
+      "MLK": "#7d8cc4",
+      "North Beach Cool": "#4db6ac",
+      "North Beach Warm": "#f2cc8f",
+      "Rossi": "#b985c7",
+      "Sava": "#d6a23a"
+    };
+
+    const events = [
+      ["Sunday", "Rossi", "7:30 AM", "8:30 AM"],
+      ["Sunday", "Garfield", "8:30 AM", "10:30 AM"],
+      ["Sunday", "Garfield", "12:30 PM", "2:00 PM"],
+
+      ["Monday", "Rossi", "7:00 AM", "8:15 AM"],
+      ["Monday", "Garfield", "7:00 AM", "8:30 AM"],
+      ["Monday", "Rossi", "2:00 PM", "3:45 PM"],
+      ["Monday", "Garfield", "5:30 PM", "7:00 PM"],
+      ["Monday", "Rossi", "6:15 PM", "7:30 PM"],
+
+      ["Tuesday", "Sava", "6:30 AM", "10:30 AM"],
+      ["Tuesday", "Balboa", "7:00 AM", "8:00 AM"],
+      ["Tuesday", "North Beach Cool", "7:00 AM", "8:00 AM"],
+      ["Tuesday", "North Beach Warm", "7:00 AM", "8:00 AM"],
+      ["Tuesday", "Coffman", "7:00 AM", "8:15 AM"],
+      ["Tuesday", "Rossi", "7:00 AM", "8:15 AM"],
+      ["Tuesday", "Garfield", "7:00 AM", "8:30 AM"],
+      ["Tuesday", "Mission", "7:00 AM", "8:30 AM"],
+      ["Tuesday", "MLK", "7:30 AM", "9:00 AM"],
+      ["Tuesday", "MLK", "9:00 AM", "11:00 AM"],
+      ["Tuesday", "North Beach Cool", "10:15 AM", "1:00 PM"],
+      ["Tuesday", "Mission", "10:45 AM", "12:30 PM"],
+      ["Tuesday", "MLK", "11:00 AM", "12:00 PM"],
+      ["Tuesday", "North Beach Warm", "12:00 PM", "1:00 PM"],
+      ["Tuesday", "Balboa", "12:30 PM", "1:30 PM"],
+      ["Tuesday", "MLK", "12:30 PM", "3:30 PM"],
+      ["Tuesday", "Rossi", "12:45 PM", "1:45 PM"],
+      ["Tuesday", "North Beach Cool", "1:30 PM", "3:45 PM"],
+      ["Tuesday", "MLK", "3:30 PM", "5:30 PM"],
+      ["Tuesday", "North Beach Cool", "5:30 PM", "6:30 PM"],
+      ["Tuesday", "North Beach Warm", "5:30 PM", "6:30 PM"],
+      ["Tuesday", "Mission", "5:45 PM", "7:00 PM"],
+      ["Tuesday", "MLK", "6:00 PM", "7:00 PM"],
+      ["Tuesday", "Rossi", "6:15 PM", "7:30 PM"],
+
+      ["Wednesday", "Garfield", "7:00 AM", "8:30 AM"],
+      ["Wednesday", "Sava", "8:30 AM", "10:30 AM"],
+      ["Wednesday", "MLK", "9:00 AM", "11:00 AM"],
+      ["Wednesday", "North Beach Cool", "10:15 AM", "12:30 PM"],
+      ["Wednesday", "Coffman", "10:30 AM", "12:15 PM"],
+      ["Wednesday", "Mission", "10:45 AM", "12:30 PM"],
+      ["Wednesday", "MLK", "11:00 AM", "12:00 PM"],
+      ["Wednesday", "Balboa", "12:30 PM", "1:30 PM"],
+      ["Wednesday", "MLK", "12:30 PM", "3:30 PM"],
+      ["Wednesday", "North Beach Cool", "1:00 PM", "3:45 PM"],
+      ["Wednesday", "Rossi", "2:00 PM", "3:45 PM"],
+      ["Wednesday", "Sava", "3:30 PM", "5:00 PM"],
+      ["Wednesday", "MLK", "3:30 PM", "5:30 PM"],
+      ["Wednesday", "Mission", "4:30 PM", "7:00 PM"],
+      ["Wednesday", "Coffman", "5:30 PM", "7:00 PM"],
+      ["Wednesday", "Garfield", "5:30 PM", "7:00 PM"],
+      ["Wednesday", "North Beach Cool", "5:30 PM", "7:00 PM"],
+      ["Wednesday", "Sava", "7:00 PM", "8:30 PM"],
+
+      ["Thursday", "Sava", "6:30 AM", "10:30 AM"],
+      ["Thursday", "Balboa", "7:00 AM", "8:00 AM"],
+      ["Thursday", "North Beach Cool", "7:00 AM", "8:00 AM"],
+      ["Thursday", "North Beach Warm", "7:00 AM", "8:00 AM"],
+      ["Thursday", "Coffman", "7:00 AM", "8:15 AM"],
+      ["Thursday", "Rossi", "7:00 AM", "8:15 AM"],
+      ["Thursday", "Garfield", "7:00 AM", "8:30 AM"],
+      ["Thursday", "Mission", "7:00 AM", "8:30 AM"],
+      ["Thursday", "MLK", "7:30 AM", "9:00 AM"],
+      ["Thursday", "MLK", "9:00 AM", "11:00 AM"],
+      ["Thursday", "North Beach Cool", "10:15 AM", "1:00 PM"],
+      ["Thursday", "Mission", "10:45 AM", "12:30 PM"],
+      ["Thursday", "MLK", "11:00 AM", "12:00 PM"],
+      ["Thursday", "North Beach Warm", "12:00 PM", "1:00 PM"],
+      ["Thursday", "MLK", "12:30 PM", "3:30 PM"],
+      ["Thursday", "Rossi", "12:45 PM", "1:45 PM"],
+      ["Thursday", "North Beach Cool", "1:30 PM", "3:45 PM"],
+      ["Thursday", "Balboa", "2:30 PM", "3:30 PM"],
+      ["Thursday", "MLK", "3:30 PM", "5:30 PM"],
+      ["Thursday", "North Beach Cool", "5:30 PM", "6:30 PM"],
+      ["Thursday", "Mission", "5:45 PM", "7:00 PM"],
+      ["Thursday", "MLK", "6:00 PM", "7:00 PM"],
+      ["Thursday", "Rossi", "6:15 PM", "7:30 PM"],
+
+      ["Friday", "Sava", "8:30 AM", "10:30 AM"],
+      ["Friday", "MLK", "9:00 AM", "11:00 AM"],
+      ["Friday", "North Beach Cool", "10:15 AM", "12:30 PM"],
+      ["Friday", "Coffman", "10:30 AM", "12:15 PM"],
+      ["Friday", "Balboa", "10:30 AM", "12:30 PM"],
+      ["Friday", "MLK", "11:00 AM", "12:00 PM"],
+      ["Friday", "MLK", "12:30 PM", "3:30 PM"],
+      ["Friday", "North Beach Cool", "1:00 PM", "3:45 PM"],
+      ["Friday", "Mission", "2:00 PM", "4:00 PM"],
+      ["Friday", "Sava", "3:30 PM", "5:00 PM"],
+      ["Friday", "MLK", "3:30 PM", "5:30 PM"],
+      ["Friday", "North Beach Cool", "5:30 PM", "7:30 PM"],
+
+      ["Saturday", "MLK", "7:00 AM", "8:30 AM"],
+      ["Saturday", "Balboa", "9:00 AM", "10:30 AM"],
+      ["Saturday", "Sava", "9:00 AM", "11:00 AM"],
+      ["Saturday", "North Beach Cool", "12:00 PM", "3:00 PM"],
+      ["Saturday", "North Beach Cool", "3:30 PM", "4:30 PM"],
+      ["Saturday", "Mission", "3:30 PM", "5:00 PM"],
+      ["Saturday", "MLK", "3:30 PM", "5:00 PM"],
+      ["Saturday", "Sava", "3:30 PM", "5:30 PM"],
+      ["Saturday", "Balboa", "4:00 PM", "5:00 PM"],
+      ["Saturday", "Coffman", "4:00 PM", "5:00 PM"]
+    ].map(([day, pool, startLabel, endLabel]) => ({
+      day,
+      pool,
+      startLabel,
+      endLabel,
+      start: parseTime(startLabel),
+      end: parseTime(endLabel)
+    }));
+
+    function parseTime(value) {
+      const match = value.match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)$/i);
+      let hour = Number(match[1]);
+      const minute = Number(match[2] || 0);
+      const meridiem = match[3].toUpperCase();
+      if (meridiem === "PM" && hour !== 12) hour += 12;
+      if (meridiem === "AM" && hour === 12) hour = 0;
+      return hour * 60 + minute;
+    }
+
+    function layoutDay(dayEvents) {
+      const sorted = dayEvents.slice().sort((a, b) => a.start - b.start || b.end - a.end);
+      const groups = [];
+      let current = [];
+      let currentEnd = -1;
+
+      for (const event of sorted) {
+        if (!current.length || event.start < currentEnd) {
+          current.push(event);
+          currentEnd = Math.max(currentEnd, event.end);
+        } else {
+          groups.push(current);
+          current = [event];
+          currentEnd = event.end;
+        }
+      }
+      if (current.length) groups.push(current);
+
+      for (const group of groups) {
+        const laneEnds = [];
+        for (const event of group) {
+          let lane = laneEnds.findIndex(end => end <= event.start);
+          if (lane === -1) {
+            lane = laneEnds.length;
+            laneEnds.push(event.end);
+          } else {
+            laneEnds[lane] = event.end;
+          }
+          event.lane = lane;
+        }
+        const lanes = laneEnds.length;
+        for (const event of group) event.lanes = lanes;
+      }
+      return sorted;
+    }
+
+    function buildLegend() {
+      const legend = document.getElementById("legend");
+      Object.entries(colors).forEach(([pool, color]) => {
+        const item = document.createElement("span");
+        item.className = "legend-item";
+        item.innerHTML = `<span class="swatch" style="background:${color}"></span>${pool}`;
+        legend.appendChild(item);
+      });
+    }
+
+    function buildCalendar() {
+      const calendar = document.getElementById("calendar");
+
+      days.forEach(day => {
+        const head = document.createElement("div");
+        head.className = "day-head";
+        head.textContent = day;
+        calendar.appendChild(head);
+      });
+
+      const axis = document.createElement("div");
+      axis.className = "time-axis";
+      for (let hour = 6; hour <= 21; hour++) {
+        const label = document.createElement("div");
+        label.className = "time-label";
+        label.style.setProperty("--hour", hour);
+        label.textContent = formatHour(hour);
+        axis.appendChild(label);
+      }
+      calendar.appendChild(axis);
+
+      days.forEach(day => {
+        const column = document.createElement("div");
+        column.className = "day";
+        column.dataset.day = day;
+        const dayEvents = layoutDay(events.filter(event => event.day === day));
+        dayEvents.forEach(event => column.appendChild(renderEvent(event)));
+        calendar.appendChild(column);
+      });
+    }
+
+    function renderEvent(event) {
+      const el = document.createElement("article");
+      el.className = "event";
+      if (event.end - event.start <= 60) el.classList.add("short");
+      const color = colors[event.pool] || "#9ca3af";
+      el.style.setProperty("--start", event.start);
+      el.style.setProperty("--end", event.end);
+      el.style.setProperty("--lane", event.lane);
+      el.style.setProperty("--lanes", event.lanes);
+      el.style.setProperty("--color", color);
+      el.title = `${event.pool}: ${event.startLabel}-${event.endLabel}`;
+      el.innerHTML = `<div class="pool">${event.pool}</div><div class="time">${event.startLabel}-${event.endLabel}</div>`;
+      return el;
+    }
+
+    function formatHour(hour) {
+      if (hour === 12) return "12 PM";
+      if (hour > 12) return `${hour - 12} PM`;
+      return `${hour} AM`;
+    }
+
+    buildLegend();
+    buildCalendar();
+  </script>
+</body>
+</html>
