@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SF Lap Swim Weekly Calendar</title>
+  <title>SF + Brisbane Lap Swim Weekly Calendar</title>
   <style>
     :root {
       --time-col: 72px;
@@ -324,13 +324,13 @@
   <div class="cursor-guide" id="cursorGuide" aria-hidden="true"></div>
   <main class="page">
     <section class="top-panel" aria-label="Calendar summary and color key">
-      <h1>SF Public Pools Lap Swim Weekly Calendar</h1>
+      <h1>SF + Brisbane Lap Swim Weekly Calendar</h1>
       <div class="validity">
         Valid summer 2026 schedule: most pools through Aug. 15;
         Mission through Aug. 16; Garfield/Rossi through Aug. 13;
-        North Beach through Aug. 10; Sava through June 27.
+        North Beach through Aug. 10; Brisbane through Aug. 16; Sava through June 27.
       </div>
-      <div class="subhead">Combined lap swim appointments from SF Rec &amp; Park pool schedules.</div>
+      <div class="subhead">Combined lap swim appointments from SF Rec &amp; Park and Brisbane Community Pool schedules.</div>
       <div class="legend" id="legend"></div>
     </section>
 
@@ -342,6 +342,7 @@
 
     <section class="footnotes">
       <div>
+        Brisbane Recreation & Lap Swim blocks include at least two lap lanes where noted by the city schedule.
         Sava's posted schedule covers June 9-June 27, 2026. North Beach has separate Cool and Warm pool lap swim slots.
         Hamilton is omitted because no current lap-swim PDF was found in the same source set.
         <div class="source-links">
@@ -353,7 +354,8 @@
           <a href="https://sfrecpark.org/DocumentCenter/View/29395">Mission</a>,
           <a href="https://sfrecpark.org/DocumentCenter/View/29329">North Beach</a>,
           <a href="https://sfrecpark.org/DocumentCenter/View/29326">Rossi</a>,
-          <a href="https://sfrecpark.org/DocumentCenter/View/29336">Sava</a>.
+          <a href="https://sfrecpark.org/DocumentCenter/View/29336">Sava</a>,
+          <a href="https://www.brisbaneca.gov/432/Community-Pool">Brisbane Community Pool</a>.
         </div>
       </div>
       <div class="sources">Closures noted by SF Rec &amp; Park: June 19 and July 4.</div>
@@ -372,20 +374,26 @@
       "North Beach Cool": "#4db6ac",
       "North Beach Warm": "#f2cc8f",
       "Rossi": "#b985c7",
-      "Sava": "#d6a23a"
+      "Sava": "#d6a23a",
+      "Brisbane": "#1f9bb4"
     };
 
     const events = [
       ["Sunday", "Rossi", "7:30 AM", "8:30 AM"],
+      ["Sunday", "Brisbane", "8:00 AM", "11:45 AM"],
       ["Sunday", "Garfield", "8:30 AM", "10:30 AM"],
       ["Sunday", "Garfield", "12:30 PM", "2:00 PM"],
 
+      ["Monday", "Brisbane", "7:00 AM", "9:45 AM"],
       ["Monday", "Rossi", "7:00 AM", "8:15 AM"],
       ["Monday", "Garfield", "7:00 AM", "8:30 AM"],
+      ["Monday", "Brisbane", "1:00 PM", "4:00 PM"],
       ["Monday", "Rossi", "2:00 PM", "3:45 PM"],
       ["Monday", "Garfield", "5:30 PM", "7:00 PM"],
       ["Monday", "Rossi", "6:15 PM", "7:30 PM"],
+      ["Monday", "Brisbane", "7:00 PM", "8:00 PM"],
 
+      ["Tuesday", "Brisbane", "7:00 AM", "9:45 AM"],
       ["Tuesday", "Sava", "6:30 AM", "10:30 AM"],
       ["Tuesday", "Balboa", "7:00 AM", "8:00 AM"],
       ["Tuesday", "North Beach Cool", "7:00 AM", "8:00 AM"],
@@ -404,13 +412,16 @@
       ["Tuesday", "MLK", "12:30 PM", "3:30 PM"],
       ["Tuesday", "Rossi", "12:45 PM", "1:45 PM"],
       ["Tuesday", "North Beach Cool", "1:30 PM", "3:45 PM"],
+      ["Tuesday", "Brisbane", "2:30 PM", "4:00 PM"],
       ["Tuesday", "MLK", "3:30 PM", "5:30 PM"],
       ["Tuesday", "North Beach Cool", "5:30 PM", "6:30 PM"],
       ["Tuesday", "North Beach Warm", "5:30 PM", "6:30 PM"],
       ["Tuesday", "Mission", "5:45 PM", "7:00 PM"],
       ["Tuesday", "MLK", "6:00 PM", "7:00 PM"],
+      ["Tuesday", "Brisbane", "6:00 PM", "8:00 PM"],
       ["Tuesday", "Rossi", "6:15 PM", "7:30 PM"],
 
+      ["Wednesday", "Brisbane", "7:00 AM", "9:45 AM"],
       ["Wednesday", "Garfield", "7:00 AM", "8:30 AM"],
       ["Wednesday", "Sava", "8:30 AM", "10:30 AM"],
       ["Wednesday", "MLK", "9:00 AM", "11:00 AM"],
@@ -419,6 +430,7 @@
       ["Wednesday", "Mission", "10:45 AM", "12:30 PM"],
       ["Wednesday", "MLK", "11:00 AM", "12:00 PM"],
       ["Wednesday", "Balboa", "12:30 PM", "1:30 PM"],
+      ["Wednesday", "Brisbane", "1:00 PM", "4:00 PM"],
       ["Wednesday", "MLK", "12:30 PM", "3:30 PM"],
       ["Wednesday", "North Beach Cool", "1:00 PM", "3:45 PM"],
       ["Wednesday", "Rossi", "2:00 PM", "3:45 PM"],
@@ -428,8 +440,10 @@
       ["Wednesday", "Coffman", "5:30 PM", "7:00 PM"],
       ["Wednesday", "Garfield", "5:30 PM", "7:00 PM"],
       ["Wednesday", "North Beach Cool", "5:30 PM", "7:00 PM"],
+      ["Wednesday", "Brisbane", "6:00 PM", "8:00 PM"],
       ["Wednesday", "Sava", "7:00 PM", "8:30 PM"],
 
+      ["Thursday", "Brisbane", "7:00 AM", "10:45 AM"],
       ["Thursday", "Sava", "6:30 AM", "10:30 AM"],
       ["Thursday", "Balboa", "7:00 AM", "8:00 AM"],
       ["Thursday", "North Beach Cool", "7:00 AM", "8:00 AM"],
@@ -448,12 +462,15 @@
       ["Thursday", "Rossi", "12:45 PM", "1:45 PM"],
       ["Thursday", "North Beach Cool", "1:30 PM", "3:45 PM"],
       ["Thursday", "Balboa", "2:30 PM", "3:30 PM"],
+      ["Thursday", "Brisbane", "2:30 PM", "4:00 PM"],
       ["Thursday", "MLK", "3:30 PM", "5:30 PM"],
       ["Thursday", "North Beach Cool", "5:30 PM", "6:30 PM"],
       ["Thursday", "Mission", "5:45 PM", "7:00 PM"],
       ["Thursday", "MLK", "6:00 PM", "7:00 PM"],
+      ["Thursday", "Brisbane", "6:00 PM", "8:00 PM"],
       ["Thursday", "Rossi", "6:15 PM", "7:30 PM"],
 
+      ["Friday", "Brisbane", "7:00 AM", "9:45 AM"],
       ["Friday", "Sava", "8:30 AM", "10:30 AM"],
       ["Friday", "MLK", "9:00 AM", "11:00 AM"],
       ["Friday", "North Beach Cool", "10:15 AM", "12:30 PM"],
@@ -466,8 +483,10 @@
       ["Friday", "Sava", "3:30 PM", "5:00 PM"],
       ["Friday", "MLK", "3:30 PM", "5:30 PM"],
       ["Friday", "North Beach Cool", "5:30 PM", "7:30 PM"],
+      ["Friday", "Brisbane", "6:00 PM", "8:00 PM"],
 
       ["Saturday", "MLK", "7:00 AM", "8:30 AM"],
+      ["Saturday", "Brisbane", "8:00 AM", "9:45 AM"],
       ["Saturday", "Balboa", "9:00 AM", "10:30 AM"],
       ["Saturday", "Sava", "9:00 AM", "11:00 AM"],
       ["Saturday", "North Beach Cool", "12:00 PM", "3:00 PM"],
