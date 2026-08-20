@@ -256,6 +256,30 @@
       display: none;
     }
 
+    .event.senior {
+      z-index: 2;
+      border-style: dashed;
+      background: color-mix(in srgb, var(--color), white 62%);
+      color: #243241;
+      box-shadow: 0 1px 2px rgba(20, 33, 48, 0.1);
+    }
+
+    .event.senior .pool::after {
+      content: " senior/therapy";
+      display: block;
+      margin-top: 2px;
+      font-weight: 750;
+      font-size: 9px;
+      line-height: 1;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .event.senior.short .time {
+      display: block;
+      font-size: 9px;
+    }
+
     .footnotes {
       margin-top: 14px;
       display: grid;
@@ -344,6 +368,7 @@
     <section class="footnotes">
       <div>
         Brisbane Recreation & Lap Swim blocks include lap lanes where noted by the city schedule.
+        Lighter dashed blocks are senior, therapy, or senior/therapy swim programs from the posted schedules.
         Garfield is omitted while closed for maintenance Aug. 14-Sep. 7, 2026.
         North Beach has separate Cool and Warm pool lap swim slots.
         <div class="source-links">
@@ -391,6 +416,7 @@
       ["Monday", "Brisbane", "7:00 AM", "9:45 AM"],
       ["Monday", "Rossi", "7:30 AM", "9:45 AM"],
       ["Monday", "Brisbane", "11:00 AM", "1:00 PM"],
+      ["Monday", "Rossi", "12:00 PM", "1:30 PM", "senior"],
       ["Monday", "Rossi", "1:45 PM", "3:45 PM"],
       ["Monday", "Brisbane", "4:30 PM", "5:45 PM"],
       ["Monday", "Rossi", "6:15 PM", "7:30 PM"],
@@ -405,6 +431,12 @@
       ["Tuesday", "Rossi", "7:30 AM", "9:45 AM"],
       ["Tuesday", "Mission", "7:30 AM", "9:00 AM"],
       ["Tuesday", "MLK", "7:30 AM", "12:00 PM"],
+      ["Tuesday", "Coffman", "8:45 AM", "10:00 AM", "senior"],
+      ["Tuesday", "MLK", "9:00 AM", "12:00 PM", "senior"],
+      ["Tuesday", "Mission", "9:15 AM", "11:00 AM", "senior"],
+      ["Tuesday", "Sava", "9:30 AM", "11:30 AM", "senior"],
+      ["Tuesday", "Rossi", "10:15 AM", "12:00 PM", "senior"],
+      ["Tuesday", "Balboa", "10:30 AM", "12:00 PM", "senior"],
       ["Tuesday", "Hamilton", "9:00 AM", "11:00 AM"],
       ["Tuesday", "North Beach Cool", "10:15 AM", "1:00 PM"],
       ["Tuesday", "Hamilton", "11:00 AM", "12:30 PM"],
@@ -418,6 +450,7 @@
       ["Tuesday", "Hamilton", "1:00 PM", "3:00 PM"],
       ["Tuesday", "North Beach Cool", "1:30 PM", "3:45 PM"],
       ["Tuesday", "Mission", "2:00 PM", "3:00 PM"],
+      ["Tuesday", "Coffman", "2:00 PM", "4:00 PM", "senior"],
       ["Tuesday", "Balboa", "2:30 PM", "3:30 PM"],
       ["Tuesday", "MLK", "3:30 PM", "5:30 PM"],
       ["Tuesday", "North Beach Warm", "4:00 PM", "6:00 PM"],
@@ -434,6 +467,13 @@
       ["Wednesday", "North Beach Cool", "8:30 AM", "10:00 AM"],
       ["Wednesday", "Hamilton", "9:00 AM", "11:00 AM"],
       ["Wednesday", "MLK", "9:00 AM", "12:00 PM"],
+      ["Wednesday", "Coffman", "9:00 AM", "10:30 AM", "senior"],
+      ["Wednesday", "MLK", "9:00 AM", "10:30 AM", "senior"],
+      ["Wednesday", "Rossi", "9:00 AM", "10:45 AM", "senior"],
+      ["Wednesday", "Mission", "9:15 AM", "11:00 AM", "senior"],
+      ["Wednesday", "Sava", "9:30 AM", "11:30 AM", "senior"],
+      ["Wednesday", "North Beach Warm", "10:15 AM", "11:15 AM", "senior"],
+      ["Wednesday", "Balboa", "10:30 AM", "12:00 PM", "senior"],
       ["Wednesday", "North Beach Cool", "10:15 AM", "12:30 PM"],
       ["Wednesday", "Coffman", "11:00 AM", "1:00 PM"],
       ["Wednesday", "Rossi", "11:00 AM", "1:30 PM"],
@@ -463,6 +503,12 @@
       ["Thursday", "Rossi", "7:30 AM", "9:45 AM"],
       ["Thursday", "Mission", "7:30 AM", "9:00 AM"],
       ["Thursday", "MLK", "7:30 AM", "12:00 PM"],
+      ["Thursday", "Coffman", "8:45 AM", "10:00 AM", "senior"],
+      ["Thursday", "MLK", "9:00 AM", "12:00 PM", "senior"],
+      ["Thursday", "Mission", "9:15 AM", "11:00 AM", "senior"],
+      ["Thursday", "Sava", "9:30 AM", "11:30 AM", "senior"],
+      ["Thursday", "Balboa", "10:00 AM", "11:00 AM", "senior"],
+      ["Thursday", "Rossi", "10:15 AM", "12:00 PM", "senior"],
       ["Thursday", "Hamilton", "9:00 AM", "11:00 AM"],
       ["Thursday", "North Beach Cool", "10:15 AM", "1:00 PM"],
       ["Thursday", "Hamilton", "11:00 AM", "12:30 PM"],
@@ -491,6 +537,12 @@
       ["Friday", "North Beach Cool", "8:30 AM", "10:00 AM"],
       ["Friday", "Hamilton", "9:00 AM", "11:00 AM"],
       ["Friday", "MLK", "9:00 AM", "12:00 PM"],
+      ["Friday", "Coffman", "9:00 AM", "10:30 AM", "senior"],
+      ["Friday", "MLK", "9:00 AM", "10:30 AM", "senior"],
+      ["Friday", "Mission", "9:15 AM", "11:00 AM", "senior"],
+      ["Friday", "Sava", "9:30 AM", "12:00 PM", "senior"],
+      ["Friday", "North Beach Warm", "10:15 AM", "11:15 AM", "senior"],
+      ["Friday", "Balboa", "10:30 AM", "12:00 PM", "senior"],
       ["Friday", "North Beach Cool", "10:15 AM", "12:30 PM"],
       ["Friday", "Coffman", "11:00 AM", "1:00 PM"],
       ["Friday", "Hamilton", "11:00 AM", "12:30 PM"],
@@ -514,19 +566,22 @@
       ["Saturday", "Sava", "9:00 AM", "11:00 AM"],
       ["Saturday", "Hamilton", "9:00 AM", "10:30 AM"],
       ["Saturday", "Mission", "11:30 AM", "12:45 PM"],
+      ["Saturday", "Coffman", "11:45 AM", "12:45 PM", "senior"],
       ["Saturday", "North Beach Cool", "12:00 PM", "1:15 PM"],
       ["Saturday", "North Beach Cool", "1:45 PM", "4:30 PM"],
+      ["Saturday", "North Beach Warm", "1:45 PM", "3:00 PM", "senior"],
       ["Saturday", "MLK", "3:30 PM", "5:00 PM"],
       ["Saturday", "Sava", "3:30 PM", "5:00 PM"],
       ["Saturday", "Mission", "4:00 PM", "5:30 PM"],
       ["Saturday", "Balboa", "4:00 PM", "5:00 PM"],
       ["Saturday", "Hamilton", "4:00 PM", "5:00 PM"],
       ["Saturday", "Coffman", "4:00 PM", "5:00 PM"]
-    ].map(([day, pool, startLabel, endLabel]) => ({
+    ].map(([day, pool, startLabel, endLabel, kind = "lap"]) => ({
       day,
       pool,
       startLabel,
       endLabel,
+      kind,
       start: parseTime(startLabel),
       end: parseTime(endLabel)
     }));
@@ -620,6 +675,7 @@
     function renderEvent(event) {
       const el = document.createElement("article");
       el.className = "event";
+      if (event.kind === "senior") el.classList.add("senior");
       if (event.end - event.start <= 60) el.classList.add("short");
       const color = colors[event.pool] || "#9ca3af";
       el.style.setProperty("--start", event.start);
@@ -627,7 +683,8 @@
       el.style.setProperty("--lane", event.lane);
       el.style.setProperty("--lanes", event.lanes);
       el.style.setProperty("--color", color);
-      el.title = `${event.pool}: ${event.startLabel}-${event.endLabel}`;
+      const programLabel = event.kind === "senior" ? "Senior/Therapy swim" : "Lap swim";
+      el.title = `${event.pool} ${programLabel}: ${event.startLabel}-${event.endLabel}`;
       el.innerHTML = `<div class="pool">${event.pool}</div><div class="time">${event.startLabel}-${event.endLabel}</div>`;
       return el;
     }
