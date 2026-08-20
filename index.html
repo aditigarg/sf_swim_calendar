@@ -7,7 +7,8 @@
   <style>
     :root {
       --time-col: 72px;
-      --day-min-width: 360px;
+      --day-min-width: 220px;
+      --lane-width: 64px;
       --hour-height: 72px;
       --start-minute: 360;
       --end-minute: 1260;
@@ -326,9 +327,9 @@
     <section class="top-panel" aria-label="Calendar summary and color key">
       <h1>SF + Brisbane Lap Swim Weekly Calendar</h1>
       <div class="validity">
-        Valid summer 2026 schedule: most pools through Aug. 15;
-        Mission through Aug. 16; Garfield/Rossi through Aug. 13;
-        North Beach through Aug. 10; Brisbane through Aug. 16; Sava through Aug. 15.
+        Current source windows: Balboa/North Beach Aug. 11-Aug. 29; Sava Aug. 18-Aug. 28;
+        MLK Aug. 18-Sep. 26; Mission Aug. 18-Oct. 17; Brisbane Aug. 17-Oct. 25;
+        Rossi Aug. 16-Dec. 10; Coffman/Hamilton Aug. 18-Dec. 12.
       </div>
       <div class="subhead">Combined lap swim appointments from SF Rec &amp; Park and Brisbane Community Pool schedules.</div>
       <div class="legend" id="legend"></div>
@@ -342,33 +343,38 @@
 
     <section class="footnotes">
       <div>
-        Brisbane Recreation & Lap Swim blocks include at least two lap lanes where noted by the city schedule.
-        Sava's posted schedule covers June 30-August 15, 2026. North Beach has separate Cool and Warm pool lap swim slots.
-        Hamilton is omitted because no current lap-swim PDF was found in the same source set.
+        Brisbane Recreation & Lap Swim blocks include lap lanes where noted by the city schedule.
+        Garfield is omitted while closed for maintenance Aug. 14-Sep. 7, 2026.
+        North Beach has separate Cool and Warm pool lap swim slots.
         <div class="source-links">
           Sources:
-          <a href="https://sfrecpark.org/DocumentCenter/View/29319">Balboa</a>,
-          <a href="https://sfrecpark.org/DocumentCenter/View/29320">Coffman</a>,
-          <a href="https://sfrecpark.org/DocumentCenter/View/29362">Garfield</a>,
-          <a href="https://sfrecpark.org/DocumentCenter/View/29328">MLK</a>,
-          <a href="https://sfrecpark.org/DocumentCenter/View/29395">Mission</a>,
-          <a href="https://sfrecpark.org/DocumentCenter/View/29329">North Beach</a>,
-          <a href="https://sfrecpark.org/DocumentCenter/View/29326">Rossi</a>,
-          <a href="https://sfrecpark.org/DocumentCenter/View/29571">Sava</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29797">Balboa</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29798">Coffman</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29808">Garfield closure</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29800">Hamilton</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29802">MLK</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29801">Mission</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29778">North Beach Cool</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29779">North Beach Warm</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29804">Rossi</a>,
+          <a href="https://sfrecpark.org/DocumentCenter/View/29815">Sava</a>,
           <a href="https://www.brisbaneca.gov/432/Community-Pool">Brisbane Community Pool</a>.
         </div>
       </div>
-      <div class="sources">Closures noted by SF Rec &amp; Park: June 19 and July 4.</div>
+      <div class="sources">Some pools close for city holidays, training days, and posted maintenance; check the linked source schedule before going.</div>
     </section>
   </main>
 
   <script>
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const startMinute = 360;
+    const endMinute = 1260;
+    const timeColumnWidth = 72;
 
     const colors = {
       "Balboa": "#77b7d8",
       "Coffman": "#f4a261",
-      "Garfield": "#8ab17d",
+      "Hamilton": "#8ab17d",
       "Mission": "#e76f51",
       "MLK": "#7d8cc4",
       "North Beach Cool": "#4db6ac",
@@ -380,119 +386,141 @@
 
     const events = [
       ["Sunday", "Rossi", "7:30 AM", "8:30 AM"],
-      ["Sunday", "Brisbane", "8:00 AM", "11:45 AM"],
-      ["Sunday", "Garfield", "8:30 AM", "10:30 AM"],
-      ["Sunday", "Garfield", "12:30 PM", "2:00 PM"],
+      ["Sunday", "Brisbane", "9:00 AM", "11:45 AM"],
 
       ["Monday", "Brisbane", "7:00 AM", "9:45 AM"],
-      ["Monday", "Rossi", "7:00 AM", "8:15 AM"],
-      ["Monday", "Garfield", "7:00 AM", "8:30 AM"],
-      ["Monday", "Brisbane", "1:00 PM", "4:00 PM"],
-      ["Monday", "Rossi", "2:00 PM", "3:45 PM"],
-      ["Monday", "Garfield", "5:30 PM", "7:00 PM"],
+      ["Monday", "Rossi", "7:30 AM", "9:45 AM"],
+      ["Monday", "Brisbane", "11:00 AM", "1:00 PM"],
+      ["Monday", "Rossi", "1:45 PM", "3:45 PM"],
+      ["Monday", "Brisbane", "4:30 PM", "5:45 PM"],
       ["Monday", "Rossi", "6:15 PM", "7:30 PM"],
-      ["Monday", "Brisbane", "7:00 PM", "8:00 PM"],
+      ["Monday", "Brisbane", "7:00 PM", "7:30 PM"],
 
+      ["Tuesday", "Sava", "7:30 AM", "9:00 AM"],
       ["Tuesday", "Brisbane", "7:00 AM", "9:45 AM"],
-      ["Tuesday", "Sava", "6:30 AM", "8:00 AM"],
       ["Tuesday", "Balboa", "7:00 AM", "8:00 AM"],
-      ["Tuesday", "North Beach Cool", "7:00 AM", "8:00 AM"],
-      ["Tuesday", "North Beach Warm", "7:00 AM", "8:00 AM"],
-      ["Tuesday", "Coffman", "7:00 AM", "8:15 AM"],
-      ["Tuesday", "Rossi", "7:00 AM", "8:15 AM"],
-      ["Tuesday", "Garfield", "7:00 AM", "8:30 AM"],
-      ["Tuesday", "Mission", "7:00 AM", "8:30 AM"],
-      ["Tuesday", "MLK", "7:30 AM", "9:00 AM"],
-      ["Tuesday", "MLK", "9:00 AM", "11:00 AM"],
+      ["Tuesday", "North Beach Cool", "7:00 AM", "10:00 AM"],
+      ["Tuesday", "North Beach Warm", "7:00 AM", "8:30 AM"],
+      ["Tuesday", "Coffman", "7:00 AM", "8:30 AM"],
+      ["Tuesday", "Rossi", "7:30 AM", "9:45 AM"],
+      ["Tuesday", "Mission", "7:30 AM", "9:00 AM"],
+      ["Tuesday", "MLK", "7:30 AM", "12:00 PM"],
+      ["Tuesday", "Hamilton", "9:00 AM", "11:00 AM"],
       ["Tuesday", "North Beach Cool", "10:15 AM", "1:00 PM"],
-      ["Tuesday", "Mission", "10:45 AM", "12:30 PM"],
-      ["Tuesday", "MLK", "11:00 AM", "12:00 PM"],
+      ["Tuesday", "Hamilton", "11:00 AM", "12:30 PM"],
+      ["Tuesday", "Mission", "11:15 AM", "1:30 PM"],
+      ["Tuesday", "Coffman", "11:30 AM", "1:00 PM"],
       ["Tuesday", "North Beach Warm", "12:00 PM", "1:00 PM"],
-      ["Tuesday", "Balboa", "12:30 PM", "1:30 PM"],
+      ["Tuesday", "Sava", "12:00 PM", "3:30 PM"],
+      ["Tuesday", "Rossi", "12:30 PM", "3:45 PM"],
+      ["Tuesday", "Balboa", "12:30 PM", "2:00 PM"],
       ["Tuesday", "MLK", "12:30 PM", "3:30 PM"],
-      ["Tuesday", "Rossi", "12:45 PM", "1:45 PM"],
+      ["Tuesday", "Hamilton", "1:00 PM", "3:00 PM"],
       ["Tuesday", "North Beach Cool", "1:30 PM", "3:45 PM"],
-      ["Tuesday", "Brisbane", "2:30 PM", "4:00 PM"],
+      ["Tuesday", "Mission", "2:00 PM", "3:00 PM"],
+      ["Tuesday", "Balboa", "2:30 PM", "3:30 PM"],
       ["Tuesday", "MLK", "3:30 PM", "5:30 PM"],
-      ["Tuesday", "North Beach Cool", "5:30 PM", "6:30 PM"],
-      ["Tuesday", "North Beach Warm", "5:30 PM", "6:30 PM"],
+      ["Tuesday", "North Beach Warm", "4:00 PM", "6:00 PM"],
+      ["Tuesday", "North Beach Cool", "4:30 PM", "6:30 PM"],
+      ["Tuesday", "Brisbane", "4:30 PM", "7:30 PM"],
       ["Tuesday", "Mission", "5:45 PM", "7:00 PM"],
       ["Tuesday", "MLK", "6:00 PM", "7:00 PM"],
-      ["Tuesday", "Brisbane", "6:00 PM", "8:00 PM"],
       ["Tuesday", "Rossi", "6:15 PM", "7:30 PM"],
 
       ["Wednesday", "Brisbane", "7:00 AM", "9:45 AM"],
-      ["Wednesday", "Garfield", "7:00 AM", "8:30 AM"],
-      ["Wednesday", "MLK", "9:00 AM", "11:00 AM"],
+      ["Wednesday", "Sava", "6:30 AM", "9:00 AM"],
+      ["Wednesday", "Hamilton", "6:30 AM", "8:30 AM"],
+      ["Wednesday", "Mission", "7:30 AM", "9:00 AM"],
+      ["Wednesday", "North Beach Cool", "8:30 AM", "10:00 AM"],
+      ["Wednesday", "Hamilton", "9:00 AM", "11:00 AM"],
+      ["Wednesday", "MLK", "9:00 AM", "12:00 PM"],
       ["Wednesday", "North Beach Cool", "10:15 AM", "12:30 PM"],
-      ["Wednesday", "Coffman", "10:30 AM", "12:15 PM"],
-      ["Wednesday", "Mission", "10:45 AM", "12:30 PM"],
-      ["Wednesday", "MLK", "11:00 AM", "12:00 PM"],
-      ["Wednesday", "Balboa", "12:30 PM", "1:30 PM"],
-      ["Wednesday", "Brisbane", "1:00 PM", "4:00 PM"],
+      ["Wednesday", "Coffman", "11:00 AM", "1:00 PM"],
+      ["Wednesday", "Rossi", "11:00 AM", "1:30 PM"],
+      ["Wednesday", "Hamilton", "11:00 AM", "12:30 PM"],
+      ["Wednesday", "Brisbane", "11:00 AM", "1:00 PM"],
+      ["Wednesday", "Mission", "11:30 AM", "1:30 PM"],
+      ["Wednesday", "Sava", "12:00 PM", "2:00 PM"],
+      ["Wednesday", "Balboa", "12:30 PM", "3:00 PM"],
       ["Wednesday", "MLK", "12:30 PM", "3:30 PM"],
+      ["Wednesday", "Hamilton", "1:00 PM", "3:00 PM"],
       ["Wednesday", "North Beach Cool", "1:00 PM", "3:45 PM"],
-      ["Wednesday", "Rossi", "2:00 PM", "3:45 PM"],
-      ["Wednesday", "Sava", "3:30 PM", "5:00 PM"],
+      ["Wednesday", "Balboa", "3:30 PM", "5:30 PM"],
       ["Wednesday", "MLK", "3:30 PM", "5:30 PM"],
-      ["Wednesday", "Mission", "4:30 PM", "7:00 PM"],
-      ["Wednesday", "Coffman", "5:30 PM", "7:00 PM"],
-      ["Wednesday", "Garfield", "5:30 PM", "7:00 PM"],
+      ["Wednesday", "Brisbane", "4:30 PM", "7:30 PM"],
+      ["Wednesday", "Mission", "5:00 PM", "7:00 PM"],
       ["Wednesday", "North Beach Cool", "5:30 PM", "7:00 PM"],
-      ["Wednesday", "Brisbane", "6:00 PM", "8:00 PM"],
+      ["Wednesday", "Coffman", "6:00 PM", "7:00 PM"],
+      ["Wednesday", "Hamilton", "6:30 PM", "8:00 PM"],
+      ["Wednesday", "Sava", "7:00 PM", "8:30 PM"],
 
-      ["Thursday", "Brisbane", "7:00 AM", "10:45 AM"],
-      ["Thursday", "Sava", "6:30 AM", "8:00 AM"],
+      ["Thursday", "Sava", "7:30 AM", "9:00 AM"],
+      ["Thursday", "Brisbane", "7:00 AM", "1:00 PM"],
       ["Thursday", "Balboa", "7:00 AM", "8:00 AM"],
-      ["Thursday", "North Beach Cool", "7:00 AM", "8:00 AM"],
-      ["Thursday", "North Beach Warm", "7:00 AM", "8:00 AM"],
-      ["Thursday", "Coffman", "7:00 AM", "8:15 AM"],
-      ["Thursday", "Rossi", "7:00 AM", "8:15 AM"],
-      ["Thursday", "Garfield", "7:00 AM", "8:30 AM"],
-      ["Thursday", "Mission", "7:00 AM", "8:30 AM"],
-      ["Thursday", "MLK", "7:30 AM", "9:00 AM"],
-      ["Thursday", "MLK", "9:00 AM", "11:00 AM"],
+      ["Thursday", "North Beach Cool", "7:00 AM", "10:00 AM"],
+      ["Thursday", "North Beach Warm", "7:00 AM", "8:30 AM"],
+      ["Thursday", "Coffman", "7:00 AM", "8:30 AM"],
+      ["Thursday", "Rossi", "7:30 AM", "9:45 AM"],
+      ["Thursday", "Mission", "7:30 AM", "9:00 AM"],
+      ["Thursday", "MLK", "7:30 AM", "12:00 PM"],
+      ["Thursday", "Hamilton", "9:00 AM", "11:00 AM"],
       ["Thursday", "North Beach Cool", "10:15 AM", "1:00 PM"],
-      ["Thursday", "Mission", "10:45 AM", "12:30 PM"],
-      ["Thursday", "MLK", "11:00 AM", "12:00 PM"],
+      ["Thursday", "Hamilton", "11:00 AM", "12:30 PM"],
+      ["Thursday", "Mission", "11:15 AM", "1:30 PM"],
+      ["Thursday", "Coffman", "11:30 AM", "1:00 PM"],
       ["Thursday", "North Beach Warm", "12:00 PM", "1:00 PM"],
+      ["Thursday", "Sava", "12:00 PM", "3:30 PM"],
+      ["Thursday", "Rossi", "12:30 PM", "3:45 PM"],
       ["Thursday", "MLK", "12:30 PM", "3:30 PM"],
-      ["Thursday", "Rossi", "12:45 PM", "1:45 PM"],
+      ["Thursday", "Hamilton", "1:00 PM", "3:00 PM"],
       ["Thursday", "North Beach Cool", "1:30 PM", "3:45 PM"],
-      ["Thursday", "Balboa", "2:30 PM", "3:30 PM"],
-      ["Thursday", "Brisbane", "2:30 PM", "4:00 PM"],
+      ["Thursday", "Mission", "2:00 PM", "3:00 PM"],
+      ["Thursday", "Coffman", "2:30 PM", "4:00 PM"],
+      ["Thursday", "Balboa", "2:30 PM", "5:00 PM"],
       ["Thursday", "MLK", "3:30 PM", "5:30 PM"],
-      ["Thursday", "North Beach Cool", "5:30 PM", "6:30 PM"],
+      ["Thursday", "Brisbane", "4:30 PM", "7:30 PM"],
+      ["Thursday", "North Beach Cool", "4:30 PM", "6:30 PM"],
       ["Thursday", "Mission", "5:45 PM", "7:00 PM"],
       ["Thursday", "MLK", "6:00 PM", "7:00 PM"],
-      ["Thursday", "Brisbane", "6:00 PM", "8:00 PM"],
       ["Thursday", "Rossi", "6:15 PM", "7:30 PM"],
-      ["Thursday", "Sava", "7:00 PM", "8:30 PM"],
 
+      ["Friday", "Sava", "6:30 AM", "9:00 AM"],
+      ["Friday", "Hamilton", "6:30 AM", "8:30 AM"],
       ["Friday", "Brisbane", "7:00 AM", "9:45 AM"],
-      ["Friday", "MLK", "9:00 AM", "11:00 AM"],
+      ["Friday", "Mission", "7:30 AM", "9:00 AM"],
+      ["Friday", "North Beach Cool", "8:30 AM", "10:00 AM"],
+      ["Friday", "Hamilton", "9:00 AM", "11:00 AM"],
+      ["Friday", "MLK", "9:00 AM", "12:00 PM"],
       ["Friday", "North Beach Cool", "10:15 AM", "12:30 PM"],
-      ["Friday", "Coffman", "10:30 AM", "12:15 PM"],
-      ["Friday", "Balboa", "10:30 AM", "12:30 PM"],
-      ["Friday", "MLK", "11:00 AM", "12:00 PM"],
+      ["Friday", "Coffman", "11:00 AM", "1:00 PM"],
+      ["Friday", "Hamilton", "11:00 AM", "12:30 PM"],
+      ["Friday", "Brisbane", "11:00 AM", "1:00 PM"],
+      ["Friday", "Mission", "11:30 AM", "1:30 PM"],
+      ["Friday", "Sava", "1:00 PM", "3:00 PM"],
+      ["Friday", "Balboa", "1:30 PM", "3:00 PM"],
       ["Friday", "MLK", "12:30 PM", "3:30 PM"],
+      ["Friday", "Hamilton", "1:00 PM", "3:00 PM"],
       ["Friday", "North Beach Cool", "1:00 PM", "3:45 PM"],
-      ["Friday", "Mission", "2:00 PM", "4:00 PM"],
+      ["Friday", "Mission", "2:30 PM", "4:30 PM"],
       ["Friday", "Sava", "3:30 PM", "5:00 PM"],
       ["Friday", "MLK", "3:30 PM", "5:30 PM"],
+      ["Friday", "Brisbane", "4:30 PM", "7:30 PM"],
       ["Friday", "North Beach Cool", "5:30 PM", "7:30 PM"],
-      ["Friday", "Brisbane", "6:00 PM", "8:00 PM"],
+      ["Friday", "Sava", "5:30 PM", "7:30 PM"],
 
       ["Saturday", "MLK", "7:00 AM", "8:30 AM"],
-      ["Saturday", "Brisbane", "8:00 AM", "9:45 AM"],
+      ["Saturday", "Brisbane", "9:00 AM", "9:45 AM"],
       ["Saturday", "Balboa", "9:00 AM", "10:30 AM"],
       ["Saturday", "Sava", "9:00 AM", "11:00 AM"],
-      ["Saturday", "North Beach Cool", "12:00 PM", "3:00 PM"],
-      ["Saturday", "North Beach Cool", "3:30 PM", "4:30 PM"],
-      ["Saturday", "Mission", "3:30 PM", "5:00 PM"],
+      ["Saturday", "Hamilton", "9:00 AM", "10:30 AM"],
+      ["Saturday", "Mission", "11:30 AM", "12:45 PM"],
+      ["Saturday", "North Beach Cool", "12:00 PM", "1:15 PM"],
+      ["Saturday", "North Beach Cool", "1:45 PM", "4:30 PM"],
       ["Saturday", "MLK", "3:30 PM", "5:00 PM"],
       ["Saturday", "Sava", "3:30 PM", "5:00 PM"],
+      ["Saturday", "Mission", "4:00 PM", "5:30 PM"],
       ["Saturday", "Balboa", "4:00 PM", "5:00 PM"],
+      ["Saturday", "Hamilton", "4:00 PM", "5:00 PM"],
       ["Saturday", "Coffman", "4:00 PM", "5:00 PM"]
     ].map(([day, pool, startLabel, endLabel]) => ({
       day,
@@ -513,40 +541,25 @@
       return hour * 60 + minute;
     }
 
+    const poolLanes = Object.keys(colors);
+    let dayWidths = [];
+
+    function activePoolsForDay(dayEvents) {
+      const activePools = new Set(dayEvents.map(event => event.pool));
+      return poolLanes.filter(pool => activePools.has(pool));
+    }
+
     function layoutDay(dayEvents) {
-      const sorted = dayEvents.slice().sort((a, b) => a.start - b.start || b.end - a.end);
-      const groups = [];
-      let current = [];
-      let currentEnd = -1;
-
-      for (const event of sorted) {
-        if (!current.length || event.start < currentEnd) {
-          current.push(event);
-          currentEnd = Math.max(currentEnd, event.end);
-        } else {
-          groups.push(current);
-          current = [event];
-          currentEnd = event.end;
-        }
-      }
-      if (current.length) groups.push(current);
-
-      for (const group of groups) {
-        const laneEnds = [];
-        for (const event of group) {
-          let lane = laneEnds.findIndex(end => end <= event.start);
-          if (lane === -1) {
-            lane = laneEnds.length;
-            laneEnds.push(event.end);
-          } else {
-            laneEnds[lane] = event.end;
-          }
-          event.lane = lane;
-        }
-        const lanes = laneEnds.length;
-        for (const event of group) event.lanes = lanes;
-      }
-      return sorted;
+      const activePools = activePoolsForDay(dayEvents);
+      const poolLaneByName = Object.fromEntries(activePools.map((pool, index) => [pool, index]));
+      return dayEvents
+        .slice()
+        .sort((a, b) => a.start - b.start || poolLanes.indexOf(a.pool) - poolLanes.indexOf(b.pool))
+        .map(event => ({
+          ...event,
+          lane: poolLaneByName[event.pool],
+          lanes: activePools.length
+        }));
     }
 
     function buildLegend() {
@@ -561,6 +574,19 @@
 
     function buildCalendar() {
       const calendar = document.getElementById("calendar");
+      const calendarWrap = document.querySelector(".calendar-wrap");
+      const laneWidth = Number(getComputedStyle(document.documentElement).getPropertyValue("--lane-width").replace("px", ""));
+      const minDayWidth = Number(getComputedStyle(document.documentElement).getPropertyValue("--day-min-width").replace("px", ""));
+      dayWidths = days.map(day => {
+        const activeCount = activePoolsForDay(events.filter(event => event.day === day)).length;
+        return Math.max(minDayWidth, activeCount * laneWidth);
+      });
+      const calendarWidth = timeColumnWidth + dayWidths.reduce((total, width) => total + width, 0);
+
+      calendar.style.gridTemplateColumns = `var(--time-col) ${dayWidths.map(width => `${width}px`).join(" ")}`;
+      calendar.style.width = `${calendarWidth}px`;
+      calendar.style.minWidth = `${calendarWidth}px`;
+      calendarWrap.style.width = `${calendarWidth}px`;
 
       days.forEach(day => {
         const head = document.createElement("div");
@@ -614,9 +640,49 @@
       return `${hour12}${minutes ? `:${String(minutes).padStart(2, "0")}` : ""} ${meridiem}`;
     }
 
+    function currentMinute() {
+      const now = new Date();
+      return now.getHours() * 60 + now.getMinutes();
+    }
+
+    function minuteToCalendarY(minute) {
+      const boundedMinute = Math.min(Math.max(minute, startMinute), endMinute);
+      const hourHeight = Number(getComputedStyle(document.documentElement).getPropertyValue("--hour-height").replace("px", ""));
+      return (boundedMinute - startMinute) * hourHeight / 60;
+    }
+
+    function currentDayScrollX() {
+      const todayIndex = new Date().getDay();
+      const pagePadding = Number(getComputedStyle(document.querySelector(".page")).paddingLeft.replace("px", ""));
+      const previousDaysWidth = dayWidths
+        .slice(0, todayIndex)
+        .reduce((total, width) => total + width, 0);
+      return pagePadding + previousDaysWidth;
+    }
+
+    function currentTimeScrollY() {
+      const calendar = document.getElementById("calendar");
+      const dayHeader = calendar.querySelector(".day-head");
+      const headerHeight = dayHeader ? dayHeader.offsetHeight : 52;
+      const calendarTop = calendar.getBoundingClientRect().top + window.scrollY;
+      return calendarTop + headerHeight + minuteToCalendarY(currentMinute()) - window.innerHeight * 0.38;
+    }
+
+    function snapToCurrentDayAndTime() {
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          left: currentDayScrollX(),
+          top: Math.max(0, currentTimeScrollY()),
+          behavior: "auto"
+        });
+        requestAnimationFrame(() => placeFishAtCurrentTime());
+      });
+    }
+
     function enableCursorGuide() {
       const guide = document.getElementById("cursorGuide");
       const calendarWrap = document.querySelector(".calendar-wrap");
+      let cursorIsDriving = false;
 
       function fillFishLine() {
         guide.textContent = "🐟 ".repeat(Math.ceil(window.innerWidth / 22) + 8);
@@ -626,18 +692,50 @@
       window.addEventListener("resize", fillFishLine);
 
       calendarWrap.addEventListener("pointermove", event => {
+        cursorIsDriving = true;
         guide.style.display = "block";
         guide.style.top = `${event.clientY}px`;
       });
 
       calendarWrap.addEventListener("pointerleave", () => {
-        guide.style.display = "none";
+        cursorIsDriving = false;
+        placeFishAtCurrentTime();
       });
+
+      window.addEventListener("scroll", () => {
+        if (!cursorIsDriving) placeFishAtCurrentTime();
+      }, { passive: true });
+
+      window.addEventListener("resize", () => {
+        if (!cursorIsDriving) placeFishAtCurrentTime();
+      });
+
+      setInterval(() => {
+        if (!cursorIsDriving) placeFishAtCurrentTime();
+      }, 60000);
+    }
+
+    function placeFishAtCurrentTime() {
+      const guide = document.getElementById("cursorGuide");
+      const calendar = document.getElementById("calendar");
+      const dayHeader = calendar.querySelector(".day-head");
+      const headerHeight = dayHeader ? dayHeader.offsetHeight : 52;
+      const currentTimeTop = calendar.getBoundingClientRect().top + headerHeight + minuteToCalendarY(currentMinute());
+      const calendarBottom = calendar.getBoundingClientRect().bottom;
+
+      if (currentTimeTop < 0 || currentTimeTop > calendarBottom) {
+        guide.style.display = "none";
+        return;
+      }
+
+      guide.style.display = "block";
+      guide.style.top = `${currentTimeTop}px`;
     }
 
     buildLegend();
     buildCalendar();
     enableCursorGuide();
+    snapToCurrentDayAndTime();
   </script>
 </body>
 </html>
