@@ -39,14 +39,15 @@
     }
 
     .top-panel {
-      position: sticky;
-      left: 28px;
+      position: relative;
       z-index: 12;
       width: min(1120px, calc(100vw - 56px));
       margin-bottom: 18px;
       background: color-mix(in srgb, var(--page), white 54%);
       border-radius: 6px;
       padding: 0 0 10px;
+      transform: translateX(var(--horizontal-scroll, 0px));
+      will-change: transform;
     }
 
     h1 {
@@ -723,6 +724,10 @@
       return now.getHours() * 60 + now.getMinutes();
     }
 
+    function pinTopPanelHorizontally() {
+      document.querySelector(".top-panel").style.setProperty("--horizontal-scroll", `${window.scrollX}px`);
+    }
+
     function minuteToCalendarY(minute) {
       const boundedMinute = Math.min(Math.max(minute, startMinute), endMinute);
       const hourHeight = Number(getComputedStyle(document.documentElement).getPropertyValue("--hour-height").replace("px", ""));
@@ -792,6 +797,9 @@
         if (!cursorIsDriving) placeFishAtCurrentTime();
       }, 60000);
     }
+
+    pinTopPanelHorizontally();
+    window.addEventListener("scroll", pinTopPanelHorizontally, { passive: true });
 
     function placeFishAtCurrentTime() {
       const guide = document.getElementById("cursorGuide");
